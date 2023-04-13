@@ -5,8 +5,23 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static Transform object1;
-    public static Transform object2;
+    public static GameManager instance;
+
+    void Awake()
+    {
+        if (!instance)
+        {
+            DontDestroyOnLoad(gameObject);
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public Transform object1;
+    public Transform object2;
 
     void Update()
     {
