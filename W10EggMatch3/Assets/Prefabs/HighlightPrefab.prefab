@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5845477440729676651}
   - component: {fileID: 5845477440729676650}
   m_Layer: 0
-  m_Name: circle
+  m_Name: HighlightPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
