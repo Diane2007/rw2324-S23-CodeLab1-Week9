@@ -7,8 +7,6 @@ using UnityEngine.EventSystems;
 public class SwapPlaceScript : MonoBehaviour
 {
     Vector3 objectPos;
-    bool enterCol;
-    bool isClicked;       //whether we have clicked on obj1 or not
 
     public GameObject highlightCircle;      //init the highlight circle around the gameObject
 

@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    //connect with SwapPlaceScript
-    
     public static GameManager instance;
     void Awake()
     {
@@ -20,6 +18,10 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    //init and define the size of the grid: 5 by 5
+    public int width = 5, height = 5;
+    int[,] grid;
     
     public Transform object1;
     public Transform object2;
