@@ -26,6 +26,8 @@ public class GameManager : MonoBehaviour
     public Transform object1;
     public Transform object2;
 
+    public GameObject eggPrefab1, eggPrefab2, eggPrefab3;
+
     void Update()
     {
         if (object1 && object2)
@@ -51,4 +53,6 @@ public class GameManager : MonoBehaviour
         //if both object 1 and object 2 are true, return true
         return object1 && object2;
     }
+    
+    
 }
