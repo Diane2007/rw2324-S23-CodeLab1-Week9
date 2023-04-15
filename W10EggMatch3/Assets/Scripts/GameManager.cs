@@ -82,9 +82,9 @@ public class GameManager : MonoBehaviour
 
     void InstantiatePrefab()
     {
-        for (var y = 0; y < height; y++)
+        for (var y = 0; y < grid.GetLength(1); y++)
         {
-            for (var x = 0; x < width; x++)
+            for (var x = 0; x < grid.GetLength(0); x++)
             {
                 switch (grid[x,y])
                 {
@@ -103,6 +103,7 @@ public class GameManager : MonoBehaviour
                     case 3:
                         break;
                 }
+                return;
             }
         }
     }
