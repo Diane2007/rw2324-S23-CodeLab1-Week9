@@ -27,11 +27,13 @@ public class GameManager : MonoBehaviour
     public Transform object2;
 
     public GameObject eggPrefab0, eggPrefab1, eggPrefab2;
+    public GameObject egg0, egg1, egg2;     //the holder for instantiated eggs
 
     void Start()
     {
         //define the grid
         grid = new int[width, height];
+        
     }
 
     void Update()

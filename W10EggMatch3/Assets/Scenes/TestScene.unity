@@ -413,13 +413,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb5c81dbbe0ee429ab10894c812c198d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 5
-  height: 5
+  width: 4
+  height: 4
   object1: {fileID: 0}
   object2: {fileID: 0}
   eggPrefab0: {fileID: 0}
   eggPrefab1: {fileID: 5415351406905081921, guid: ab7996e49838d4e4ead4ce34186cb371, type: 3}
   eggPrefab2: {fileID: 7624961709266873149, guid: 07e6c9ad0a0b9408ea8209f1a46ec748, type: 3}
+  egg0: {fileID: 0}
+  egg1: {fileID: 0}
+  egg2: {fileID: 0}
 --- !u!1001 &4996768375698756140
 PrefabInstance:
   m_ObjectHideFlags: 0
