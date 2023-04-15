@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -28,12 +29,29 @@ public class GameManager : MonoBehaviour
 
     public GameObject eggPrefab0, eggPrefab1, eggPrefab2;
     public GameObject egg0, egg1, egg2;     //the holder for instantiated eggs
+    public GameObject prefabs;
+    int randomNum;
+    
 
     void Start()
     {
         //define the grid
         grid = new int[width, height];
-        
+
+        //the array to pull eggs from
+        GameObject[] threePrefabs = { eggPrefab0, eggPrefab1, eggPrefab2 };
+
+        for (int y = 0; y < width; y++)
+        {
+            for (int x = 0; x < height; x++)
+            {
+                randomNum = Random.Range(0, 3);
+                Debug.Log(randomNum);
+                grid[x, y] = randomNum;
+                InstantiatePrefab();
+            }
+        }
+
     }
 
     void Update()
@@ -61,6 +79,33 @@ public class GameManager : MonoBehaviour
         //if both object 1 and object 2 are true, return true
         return object1 && object2;
     }
-    
-    
-}
+
+    void InstantiatePrefab()
+    {
+        for (var y = 0; y < height; y++)
+        {
+            for (var x = 0; x < width; x++)
+            {
+                switch (grid[x,y])
+                {
+                    case 0:
+                        GameObject obj0 = Instantiate(eggPrefab0,new Vector3(x, y, 0), Quaternion.identity);
+                        obj0.transform.parent = prefabs.transform;
+                        break;
+                    case 1:
+                        GameObject obj1 = Instantiate(eggPrefab1,new Vector3(x, y, 0), Quaternion.identity);
+                        obj1.transform.parent = prefabs.transform;
+                        break;
+                    case 2:
+                        GameObject obj2 = Instantiate(eggPrefab2,new Vector3(x, y, 0), Quaternion.identity);
+                        obj2.transform.parent = prefabs.transform;
+                        break;
+                    case 3:
+                        break;
+                }
+            }
+        }
+    }
+
+
+    }
