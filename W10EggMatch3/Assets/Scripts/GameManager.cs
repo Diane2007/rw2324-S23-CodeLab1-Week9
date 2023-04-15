@@ -48,10 +48,9 @@ public class GameManager : MonoBehaviour
                 randomNum = Random.Range(0, 3);
                 Debug.Log(randomNum);
                 grid[x, y] = randomNum;
-                InstantiatePrefab();
             }
         }
-
+        InstantiatePrefab();
     }
 
     void Update()
@@ -103,7 +102,6 @@ public class GameManager : MonoBehaviour
                     case 3:
                         break;
                 }
-                return;
             }
         }
     }
