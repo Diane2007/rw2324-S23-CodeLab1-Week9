@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
     private bool columnThree = false;
     private bool rowThree = false;
 
+    private int gridXY;
+
     void Awake()
     {
         instance = this;
@@ -32,7 +34,10 @@ public class GameManager : MonoBehaviour
     private List<GameObject> spawnedPiecesList = new List<GameObject>();
     int randomNum;
 
-    public GameObject highlight;
+    public GameObject whiteEgg;
+    public GameObject brownEgg;
+    public GameObject rainbowEgg;
+    private GameObject newEgg;
     
 
     void Start()
@@ -136,6 +141,7 @@ public class GameManager : MonoBehaviour
                     if (grid[x, y] == grid[x, y + 1] && grid[x, y] == grid[x, y + 2] && grid[x,y] != 3)
                     {
                         Debug.Log("row" + grid[x,y]);
+                        gridXY = grid[x, y];
                         columnThree = true;
                         if (shouldReplace)
                         {
@@ -153,6 +159,7 @@ public class GameManager : MonoBehaviour
                     if (grid[x, y] == grid[x + 1, y] && grid[x, y] == grid[x + 2, y] && grid[x,y] != 3)
                     {
                         Debug.Log("column" + grid [x,y]);
+                        gridXY = grid[x, y];
                         rowThree = true;
                         if (shouldReplace)
                         {
@@ -164,6 +171,8 @@ public class GameManager : MonoBehaviour
                         return true;
                     }
                 }
+
+                
             }
         }
         return false;
@@ -188,7 +197,22 @@ public class GameManager : MonoBehaviour
             {
                 //spawnedPiecesList.Add(newEgg);
                 grid[x, y] = 3;
-                GameObject newEgg = Instantiate(highlight, new Vector3(x,y,0), Quaternion.identity);
+                switch (gridXY)
+                {
+                    case 0:
+                        newEgg = Instantiate(brownEgg, new Vector3(x,y,0), Quaternion.identity);
+                        break;
+                    case 1:
+                        newEgg = Instantiate(whiteEgg, new Vector3(x,y,0), Quaternion.identity);
+                        break;
+                    case 2:
+                        newEgg = Instantiate(rainbowEgg, new Vector3(x,y,0), Quaternion.identity);
+                        break;
+                    default:
+                        newEgg = null;
+                        break;
+                }
+                
                 spawnedPiecesList.Insert(y * 4 + x, newEgg);
                 spawnedPiecesList.Remove(item);
                 Destroy(item);
