@@ -19,17 +19,24 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    //init and define the size of the grid: 5 by 5
-    public int width = 5, height = 5;
+    //init and define the size of the grid: 4 by 4
+    public int width = 4, height = 4;
     int[,] grid;
     
     public Transform object1;
     public Transform object2;
 
-    public GameObject eggPrefab1, eggPrefab2, eggPrefab3;
+    public GameObject eggPrefab0, eggPrefab1, eggPrefab2;
+
+    void Start()
+    {
+        //define the grid
+        grid = new int[width, height];
+    }
 
     void Update()
     {
+        //when clicked on two sprites, swap position
         if (object1 && object2)
         {
             //get the two objects' position and assign them to the Vector2 vars
@@ -39,8 +46,7 @@ public class GameManager : MonoBehaviour
             //swap the positions
             object2.position = obj1Pos;
             object1.position = obj2Pos;
-            
-            Swapped(object1, object2);
+            Swapped(object1, object2);      //this allows disabling highlight in SwapPlaceScript
 
             //reset object 1 and object 2 to null
             object1 = null;
