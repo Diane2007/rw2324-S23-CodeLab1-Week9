@@ -389,7 +389,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.34923458, g: 0.509434, b: 0.37499645, a: 0}
+  m_BackGroundColor: {r: 0.22985639, g: 0.49056602, b: 0.35307628, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -560,4 +560,6 @@ MonoBehaviour:
   egg1: {fileID: 0}
   egg2: {fileID: 0}
   prefabs: {fileID: 368840933}
-  highlight: {fileID: 7352501414420373464, guid: 3bd368e176a4ca647804f0612167c115, type: 3}
+  whiteEgg: {fileID: 4268892128634357846, guid: 9b257dc24f6cef84e988f979c167d46b, type: 3}
+  brownEgg: {fileID: 8972959344295319178, guid: 759536c4525b9ec459e2b7ab7a1ca070, type: 3}
+  rainbowEgg: {fileID: 7352501414420373464, guid: 3bd368e176a4ca647804f0612167c115, type: 3}
