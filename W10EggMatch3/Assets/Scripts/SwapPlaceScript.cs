@@ -41,6 +41,10 @@ public class SwapPlaceScript : MonoBehaviour
                 Debug.Log("Object 2 clicked!");
                 //the transform of the current gameObject is assigned to object2
                 GameManager.instance.object2 = transform;
+                
+                //have to specify which highlight to turn off
+                GameManager.instance.object1.GetComponent<SwapPlaceScript>().highlightCircle.SetActive(false);
+                GameManager.instance.object2.GetComponent<SwapPlaceScript>().highlightCircle.SetActive(false);
             }
         }
     }

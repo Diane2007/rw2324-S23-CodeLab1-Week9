@@ -65,11 +65,11 @@ public class GameManager : MonoBehaviour
             //swap the positions
             object2.position = obj1Pos;
             object1.position = obj2Pos;
-            Swapped(object1, object2);      //this allows disabling highlight in SwapPlaceScript
 
             //reset object 1 and object 2 to null
             object1 = null;
             object2 = null;
+            
         }
     }
 
