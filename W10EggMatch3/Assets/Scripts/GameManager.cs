@@ -1,28 +1,26 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
+    private bool columnThree = false;
+    private bool rowThree = false;
+
     void Awake()
     {
-        if (!instance)
-        {
-            DontDestroyOnLoad(gameObject);
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        instance = this;
     }
 
     //init and define the size of the grid: 4 by 4
     public int width = 4, height = 4;
-    int[,] grid;
+    public int[,] grid;
+  
     
     public Transform object1;
     public Transform object2;
@@ -30,7 +28,11 @@ public class GameManager : MonoBehaviour
     public GameObject eggPrefab0, eggPrefab1, eggPrefab2;
     public GameObject egg0, egg1, egg2;     //the holder for instantiated eggs
     public GameObject prefabs;
+    private Dictionary<string, GameObject> spawnedPieces = new Dictionary<string, GameObject>();
+    private List<GameObject> spawnedPiecesList = new List<GameObject>();
     int randomNum;
+
+    public GameObject highlight;
     
 
     void Start()
@@ -40,36 +42,46 @@ public class GameManager : MonoBehaviour
 
         //the array to pull eggs from
         GameObject[] threePrefabs = { eggPrefab0, eggPrefab1, eggPrefab2 };
+        
+        checkInitialization();
+        
+        InstantiatePrefab();
+    }
 
-        for (int y = 0; y < width; y++)
+    void checkInitialization()
+    {
+        for (int x = 0; x < width; x++)
         {
-            for (int x = 0; x < height; x++)
+            for (int y = 0; y < height; y++)
             {
                 randomNum = Random.Range(0, 3);
-                Debug.Log(randomNum);
+                //Debug.Log(randomNum);
                 grid[x, y] = randomNum;
             }
         }
-        InstantiatePrefab();
+
+        int counter = 0;
+        while (ConnectThree(false))
+        {
+            counter++;
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    randomNum = Random.Range(0, 3);
+                    //Debug.Log(randomNum);
+                    grid[x, y] = randomNum;
+                }
+            }
+        }
+        Debug.Log("couldnt find a valid grid, counter = "+counter);
     }
 
     void Update()
     {
-        //when clicked on two sprites, swap position
-        if (object1 && object2)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            //get the two objects' position and assign them to the Vector2 vars
-            Vector2 obj1Pos = object1.position;
-            Vector2 obj2Pos = object2.position;
-
-            //swap the positions
-            object2.position = obj1Pos;
-            object1.position = obj2Pos;
-
-            //reset object 1 and object 2 to null
-            object1 = null;
-            object2 = null;
-            
+            SceneManager.LoadScene(0);
         }
     }
 
@@ -81,30 +93,125 @@ public class GameManager : MonoBehaviour
 
     void InstantiatePrefab()
     {
-        for (var y = 0; y < grid.GetLength(1); y++)
+        for (int y = 0; y < grid.GetLength(1); y++)
         {
-            for (var x = 0; x < grid.GetLength(0); x++)
+            for (int x = 0; x < grid.GetLength(0); x++)
             {
                 switch (grid[x,y])
-                {
-                    case 0:
-                        GameObject obj0 = Instantiate(eggPrefab0,new Vector3(x, y, 0), Quaternion.identity);
-                        obj0.transform.parent = prefabs.transform;
-                        break;
-                    case 1:
-                        GameObject obj1 = Instantiate(eggPrefab1,new Vector3(x, y, 0), Quaternion.identity);
-                        obj1.transform.parent = prefabs.transform;
-                        break;
-                    case 2:
-                        GameObject obj2 = Instantiate(eggPrefab2,new Vector3(x, y, 0), Quaternion.identity);
-                        obj2.transform.parent = prefabs.transform;
-                        break;
-                    case 3:
-                        break;
-                }
+                    {
+                        case 0:
+                            GameObject obj0 = Instantiate(eggPrefab0,new Vector3(x, y, 0), Quaternion.identity);
+                            obj0.transform.parent = prefabs.transform;
+                            //spawnedPieces.Add("" + (x * 10 + y), obj0);
+                            spawnedPiecesList.Add(obj0);
+                            break;
+                        case 1:
+                            GameObject obj1 = Instantiate(eggPrefab1,new Vector3(x, y, 0), Quaternion.identity);
+                            obj1.transform.parent = prefabs.transform;
+                            //spawnedPieces.Add("" + (x * 10 + y), obj1);
+                            spawnedPiecesList.Add(obj1);
+                            break;
+                        case 2:
+                            GameObject obj2 = Instantiate(eggPrefab2,new Vector3(x, y, 0), Quaternion.identity);
+                            obj2.transform.parent = prefabs.transform;
+                            //spawnedPieces.Add("" + (x * 10 + y), obj2);
+                            spawnedPiecesList.Add(obj2);
+                            break;
+                        case 3:
+                            break;
+                    }
             }
         }
     }
 
+    public bool ConnectThree(bool shouldReplace = true) // default true; only false when specified
+    {
+        //Debug.Log("called");
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (y < 2)
+                {
+                    if (grid[x, y] == grid[x, y + 1] && grid[x, y] == grid[x, y + 2] && grid[x,y] != 3)
+                    {
+                        Debug.Log("row" + grid[x,y]);
+                        columnThree = true;
+                        if (shouldReplace)
+                        {
+                            ReplaceThreeVer2(x,y);
+                            ReplaceThreeVer2(x,y + 1);
+                            ReplaceThreeVer2(x,y + 2);
+                            ConnectThree(shouldReplace);
+                        }
+                        return true;
+                    }
+                }
 
+                if (x < 2)
+                {
+                    if (grid[x, y] == grid[x + 1, y] && grid[x, y] == grid[x + 2, y] && grid[x,y] != 3)
+                    {
+                        Debug.Log("column" + grid [x,y]);
+                        rowThree = true;
+                        if (shouldReplace)
+                        {
+                            ReplaceThreeVer2(x,y);
+                            ReplaceThreeVer2(x+1,y);
+                            ReplaceThreeVer2(x+2,y);
+                            ConnectThree(shouldReplace);
+                        }
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
+
+    void ReplaceThree(int a, int b)
+    {
+        grid[a, b] = -2;
+        //ReInstantiate(a,b);
+    }
+
+    void ReplaceThreeVer2(int x, int y)
+    {
+       Debug.Log(spawnedPiecesList.Count);
+        
+        foreach (var item in spawnedPiecesList)
+        {
+            //Debug.Log(item.transform.position);
+            Debug.Log(x + "+" + y);
+            
+            if (item.transform.position == new Vector3(x, y, 0))
+            {
+                //spawnedPiecesList.Add(newEgg);
+                grid[x, y] = 3;
+                GameObject newEgg = Instantiate(highlight, new Vector3(x,y,0), Quaternion.identity);
+                spawnedPiecesList.Insert(y * 4 + x, newEgg);
+                spawnedPiecesList.Remove(item);
+                Destroy(item);
+                break;
+            }
+        }
+    }
+
+    void ReInstantiate(int a, int b)
+    {
+        Debug.Log("destroyed" + "" +(a * 10 + b));
+        Destroy(spawnedPieces["" +(a * 10 + b)]);
+
+        for (var y = 0; y < grid.GetLength(1); y++)
+        {
+            for (var x = 0; x < grid.GetLength(0); x++)
+            {
+                if (grid[x, y] == -2)
+                {
+                    grid[x, y] = Random.Range(0, 3);
+                }
+                InstantiatePrefab();
+            }
+        }
+    }
+}
