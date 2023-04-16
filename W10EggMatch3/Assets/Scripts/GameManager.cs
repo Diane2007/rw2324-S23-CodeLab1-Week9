@@ -85,7 +85,7 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
-        //Debug.Log("couldnt find a valid grid, counter = "+counter);
+        Debug.Log("couldnt find a valid grid, counter = "+counter);
     }
 
     void Update()
@@ -152,8 +152,9 @@ public class GameManager : MonoBehaviour
                         //assign each grid's value to gridXY
                         gridXY = grid[x, y];
                         
-                        if (shouldReplace)      //if we have a matching 3, replace these three grids
+                        if (shouldReplace)      //if we have a matching 3, shoudReplace is true
                         {
+                            //we replace all three grids
                             ReplaceThreeVer2(x,y);
                             ReplaceThreeVer2(x,y + 1);
                             ReplaceThreeVer2(x,y + 2);
