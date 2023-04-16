@@ -146,6 +146,7 @@ public class GameManager : MonoBehaviour
                     if (grid[x, y] == grid[x, y + 1] && grid[x, y] == grid[x, y + 2] && grid[x,y] != 3)
                     {
                         Debug.Log("row" + grid[x,y]);
+                        //assign each grid's value to gridXU
                         gridXY = grid[x, y];
                         columnThree = true;
                         if (shouldReplace)
@@ -153,7 +154,7 @@ public class GameManager : MonoBehaviour
                             ReplaceThreeVer2(x,y);
                             ReplaceThreeVer2(x,y + 1);
                             ReplaceThreeVer2(x,y + 2);
-                            ConnectThree(shouldReplace);
+                            ConnectThree();
                         }
                         return true;
                     }
@@ -183,21 +184,15 @@ public class GameManager : MonoBehaviour
         return false;
     }
 
-    void ReplaceThree(int a, int b)
-    {
-        grid[a, b] = -2;
-        //ReInstantiate(a,b);
-    }
-
     void ReplaceThreeVer2(int x, int y)
     {
+        //just to make sure we have 16 spawned pieces
        Debug.Log(spawnedPiecesList.Count);
         
-        foreach (var item in spawnedPiecesList)
+        foreach (GameObject item in spawnedPiecesList)
         {
             //Debug.Log(item.transform.position);
-            Debug.Log(x + "+" + y);
-            
+
             if (item.transform.position == new Vector3(x, y, 0))
             {
                 //spawnedPiecesList.Add(newEgg);
