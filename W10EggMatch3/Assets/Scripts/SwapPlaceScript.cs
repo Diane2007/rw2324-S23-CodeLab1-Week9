@@ -40,7 +40,7 @@ public class SwapPlaceScript : MonoBehaviour
             //(basically avoid clicking on one gameObject twice)
             else if(!GameManager.instance.object2  && GameManager.instance.object1 != transform)
             {
-                Debug.Log("Object 2 clicked!");
+                //Debug.Log("Object 2 clicked!");
                 //the transform of the current gameObject is assigned to object2
                 GameManager.instance.object2 = gameObject.transform;
                 swap();

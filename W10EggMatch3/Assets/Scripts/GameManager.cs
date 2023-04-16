@@ -9,7 +9,7 @@ using Random = UnityEngine.Random;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    private bool columnThree = false;
+    // private bool columnThree = false;
     private bool rowThree = false;
 
     private int gridXY;
@@ -85,7 +85,7 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
-        Debug.Log("couldnt find a valid grid, counter = "+counter);
+        //Debug.Log("couldnt find a valid grid, counter = "+counter);
     }
 
     void Update()
@@ -141,20 +141,23 @@ public class GameManager : MonoBehaviour
         {
             for (int y = 0; y < height; y++)
             {
-                if (y < 2)
+                if (y < 2)      //check only 2 grids per column
                 {
+                    //if the grid has the same value as the grid to the right, and also the same as the grid further right
+                    //but the grid's value isn't 3, which is for eggs that have already match-3'ed and cracked in the game
                     if (grid[x, y] == grid[x, y + 1] && grid[x, y] == grid[x, y + 2] && grid[x,y] != 3)
                     {
-                        Debug.Log("row" + grid[x,y]);
-                        //assign each grid's value to gridXU
+                        //Debug.Log("column" + grid[x,y]);
+                        
+                        //assign each grid's value to gridXY
                         gridXY = grid[x, y];
-                        columnThree = true;
-                        if (shouldReplace)
+                        
+                        if (shouldReplace)      //if we have a matching 3, replace these three grids
                         {
                             ReplaceThreeVer2(x,y);
                             ReplaceThreeVer2(x,y + 1);
                             ReplaceThreeVer2(x,y + 2);
-                            ConnectThree();
+                            ConnectThree();     //run this function again to check the board once over
                         }
                         return true;
                     }
@@ -164,7 +167,7 @@ public class GameManager : MonoBehaviour
                 {
                     if (grid[x, y] == grid[x + 1, y] && grid[x, y] == grid[x + 2, y] && grid[x,y] != 3)
                     {
-                        Debug.Log("column" + grid [x,y]);
+                        //Debug.Log("row" + grid [x,y]);
                         gridXY = grid[x, y];
                         rowThree = true;
                         if (shouldReplace)
@@ -187,8 +190,9 @@ public class GameManager : MonoBehaviour
     void ReplaceThreeVer2(int x, int y)
     {
         //just to make sure we have 16 spawned pieces
-       Debug.Log(spawnedPiecesList.Count);
+        //Debug.Log(spawnedPiecesList.Count);
         
+        //for each item in the 
         foreach (GameObject item in spawnedPiecesList)
         {
             //Debug.Log(item.transform.position);
