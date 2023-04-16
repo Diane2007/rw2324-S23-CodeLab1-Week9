@@ -137,14 +137,17 @@ public class GameManager : MonoBehaviour
 
     public bool ConnectThree(bool shouldReplace = true) // default true; only false when specified
     {
+        //shouldReplace is true when we are playing the game
+        //shouldReplace is false when we are just generating grids and their values
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
                 if (y < 2)      //check only 2 grids per column
                 {
-                    //if the grid has the same value as the grid to the right, and also the same as the grid further right
-                    //but the grid's value isn't 3, which is for eggs that have already match-3'ed and cracked in the game
+                    //if the grid has the same value as the grid to the right
+                    //and also the same as the grid further right
+                    //but the grid's value isn't 3, which is for eggs that have already matched in the game
                     if (grid[x, y] == grid[x, y + 1] && grid[x, y] == grid[x, y + 2] && grid[x,y] != 3)
                     {
                         //Debug.Log("column" + grid[x,y]);
@@ -185,6 +188,7 @@ public class GameManager : MonoBehaviour
                 
             }
         }
+        //after evaluating the board through the loops, we can't find any matches and return false
         return false;
     }
 
@@ -225,22 +229,22 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-
-    void ReInstantiate(int a, int b)
-    {
-        Debug.Log("destroyed" + "" +(a * 10 + b));
-        Destroy(spawnedPieces["" +(a * 10 + b)]);
-
-        for (var y = 0; y < grid.GetLength(1); y++)
-        {
-            for (var x = 0; x < grid.GetLength(0); x++)
-            {
-                if (grid[x, y] == -2)
-                {
-                    grid[x, y] = Random.Range(0, 3);
-                }
-                InstantiatePrefab();
-            }
-        }
-    }
+    //
+    // void ReInstantiate(int a, int b)
+    // {
+    //     Debug.Log("destroyed" + "" +(a * 10 + b));
+    //     Destroy(spawnedPieces["" +(a * 10 + b)]);
+    //
+    //     for (var y = 0; y < grid.GetLength(1); y++)
+    //     {
+    //         for (var x = 0; x < grid.GetLength(0); x++)
+    //         {
+    //             if (grid[x, y] == -2)
+    //             {
+    //                 grid[x, y] = Random.Range(0, 3);
+    //             }
+    //             InstantiatePrefab();
+    //         }
+    //     }
+    // }
 }
