@@ -44,7 +44,7 @@ public class SwapPlaceScript : MonoBehaviour
                 //the transform of the current gameObject is assigned to object2
                 GameManager.instance.object2 = gameObject.transform;
                 swap();
-                GameManager.instance.ConnectThree();
+                GameManager.instance.ConnectThree(true);
                 
                 //have to specify which highlight to turn off
                 GameManager.instance.object1.GetComponent<SwapPlaceScript>().highlightCircle.SetActive(false);

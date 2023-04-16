@@ -135,7 +135,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public bool ConnectThree(bool shouldReplace = true) // default true; only false when specified
+    public bool ConnectThree(bool shouldReplace)
     {
         //shouldReplace is true when we are playing the game
         //shouldReplace is false when we are just generating grids and their values
@@ -161,7 +161,7 @@ public class GameManager : MonoBehaviour
                             ReplaceThreeVer2(x,y);
                             ReplaceThreeVer2(x,y + 1);
                             ReplaceThreeVer2(x,y + 2);
-                            ConnectThree();     //run this function again to check the board once over
+                            ConnectThree(shouldReplace);     //run this function again to check the board once over
                         }
                         return true;
                     }
