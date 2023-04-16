@@ -59,14 +59,16 @@ public class SwapPlaceScript : MonoBehaviour
 
     private void swap()
     {
-        //swap value in grid[,]
-        
+        //swap value in grid
         //get the two objects' position and assign them to the Vector2 vars
         Vector2 obj1Pos = GameManager.instance.object1.position;
         Vector2 obj2Pos = GameManager.instance.object2.position;
 
+        //get obj1 and obj2's grid values
         int obj1Val = GameManager.instance.grid[(int)obj1Pos.x, (int)obj1Pos.y];
         int obj2Val = GameManager.instance.grid[(int)obj2Pos.x, (int)obj2Pos.y];
+        
+        //swap the grid values
         GameManager.instance.grid[(int)obj1Pos.x, (int)obj1Pos.y] = obj2Val;
         GameManager.instance.grid[(int)obj2Pos.x, (int)obj2Pos.y] = obj1Val;
 

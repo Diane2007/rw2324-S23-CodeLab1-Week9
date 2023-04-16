@@ -16,6 +16,9 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
+        //since we want to reload the game, and we don't want GameManager to not reload its Awake and Start
+        //especially when we set up the grid in Start
+        //set instance to this
         instance = this;
     }
 
@@ -28,16 +31,18 @@ public class GameManager : MonoBehaviour
     public Transform object2;
 
     public GameObject eggPrefab0, eggPrefab1, eggPrefab2;
-    public GameObject egg0, egg1, egg2;     //the holder for instantiated eggs
-    public GameObject prefabs;
+    public GameObject prefabs;      //parent obj of instantiated eggs
+    
+    //go crazy and make both a dictionary and a list for the instantiated eggs
     private Dictionary<string, GameObject> spawnedPieces = new Dictionary<string, GameObject>();
     private List<GameObject> spawnedPiecesList = new List<GameObject>();
-    int randomNum;
+    
+    int randomNum;      //init the int for randomization
 
     public GameObject whiteEgg;
     public GameObject brownEgg;
     public GameObject rainbowEgg;
-    private GameObject newEgg;
+    private GameObject newEgg;      //holder of instantiated eggs
     
 
     void Start()
@@ -46,7 +51,7 @@ public class GameManager : MonoBehaviour
         grid = new int[width, height];
 
         //the array to pull eggs from
-        GameObject[] threePrefabs = { eggPrefab0, eggPrefab1, eggPrefab2 };
+        //GameObject[] threePrefabs = { eggPrefab0, eggPrefab1, eggPrefab2 };
         
         checkInitialization();
         
@@ -59,13 +64,14 @@ public class GameManager : MonoBehaviour
         {
             for (int y = 0; y < height; y++)
             {
+                //initialize the grid, and assign a random int --0, 1, 2--to each grid
                 randomNum = Random.Range(0, 3);
                 //Debug.Log(randomNum);
                 grid[x, y] = randomNum;
             }
         }
-
-        int counter = 0;
+        
+        int counter = 0;        //a legacy counter to debug infinite loop, which we used to have a lot
         while (ConnectThree(false))
         {
             counter++;
@@ -131,7 +137,6 @@ public class GameManager : MonoBehaviour
 
     public bool ConnectThree(bool shouldReplace = true) // default true; only false when specified
     {
-        //Debug.Log("called");
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
