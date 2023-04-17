@@ -39,9 +39,11 @@ public class GameManager : MonoBehaviour
     
     int randomNum;      //init the int for randomization
 
+    //the cracked eggs prefabs
     public GameObject whiteEgg;
     public GameObject brownEgg;
     public GameObject rainbowEgg;
+    
     private GameObject newEgg;      //holder of instantiated eggs
     
 
@@ -72,7 +74,11 @@ public class GameManager : MonoBehaviour
         }
         
         int counter = 0;        //a legacy counter to debug infinite loop, which we used to have a lot
-        while (ConnectThree(false))
+        
+        //THE FOLLLOWING: CHECK IF THERE ARE MATCH-3'S ON THE BOARD WHEN WE ARE GENERATING THE GRID, BEFORE THE GAME STARTS
+        //Just define each grid's value and check if the starting board has matches
+        //if there is matches, replace
+        while (ConnectThree(false)) //shouldReplace is false because we don't need to change anything to cracked eggs yet
         {
             counter++;
             for (int x = 0; x < width; x++)
@@ -81,15 +87,17 @@ public class GameManager : MonoBehaviour
                 {
                     randomNum = Random.Range(0, 3);
                     //Debug.Log(randomNum);
-                    grid[x, y] = randomNum;
+                    grid[x, y] = randomNum;     //assign a new value to those matched grids
+                    //Debug.Log("ConnectThree: " + ConnectThree(false));
                 }
             }
         }
-        Debug.Log("couldnt find a valid grid, counter = "+counter);
+        Debug.Log("couldnt find a valid grid, counter = "+counter + "ConnectThree: " + ConnectThree(false));
     }
 
     void Update()
     {
+        //reload scene when pressing space bar
         if (Input.GetKeyDown(KeyCode.Space))
         {
             SceneManager.LoadScene(0);
@@ -110,25 +118,22 @@ public class GameManager : MonoBehaviour
             {
                 switch (grid[x,y])
                     {
-                        case 0:
+                        case 0:     //if grid value is 0, generate eggPrefab0 (brown)
                             GameObject obj0 = Instantiate(eggPrefab0,new Vector3(x, y, 0), Quaternion.identity);
-                            obj0.transform.parent = prefabs.transform;
-                            //spawnedPieces.Add("" + (x * 10 + y), obj0);
-                            spawnedPiecesList.Add(obj0);
+                            obj0.transform.parent = prefabs.transform;  //add to the parent object
+                            spawnedPiecesList.Add(obj0);    //add obj0 to the list for spawned eggs
                             break;
-                        case 1:
+                        case 1:     //if grid value is 1, generate eggPrefab0 (white)
                             GameObject obj1 = Instantiate(eggPrefab1,new Vector3(x, y, 0), Quaternion.identity);
                             obj1.transform.parent = prefabs.transform;
-                            //spawnedPieces.Add("" + (x * 10 + y), obj1);
-                            spawnedPiecesList.Add(obj1);
+                            spawnedPiecesList.Add(obj1);    //add obj1 to the list
                             break;
-                        case 2:
+                        case 2:     //if grid value is 2, generate eggPrefab0 (rainbow)
                             GameObject obj2 = Instantiate(eggPrefab2,new Vector3(x, y, 0), Quaternion.identity);
                             obj2.transform.parent = prefabs.transform;
-                            //spawnedPieces.Add("" + (x * 10 + y), obj2);
-                            spawnedPiecesList.Add(obj2);
+                            spawnedPiecesList.Add(obj2);    //add obj2 to the list
                             break;
-                        case 3:
+                        case 3:     //if grid value is 3, don't do anything
                             break;
                     }
             }
@@ -155,15 +160,21 @@ public class GameManager : MonoBehaviour
                         //assign each grid's value to gridXY
                         gridXY = grid[x, y];
                         
-                        if (shouldReplace)      //if we have a matching 3, shoudReplace is true
+                        if (shouldReplace)      //if we have a matching 3
                         {
-                            //we replace all three grids
+                            //we replace all three grids with cracked eggs
                             ReplaceThreeVer2(x,y);
                             ReplaceThreeVer2(x,y + 1);
                             ReplaceThreeVer2(x,y + 2);
                             ConnectThree(shouldReplace);     //run this function again to check the board once over
+                                                             //until shouldReplace is false
                         }
-                        return true;
+                        else
+                        {
+                            //if we don't have a matching 3
+                            //ConnectThree returns true
+                            return true;
+                        }
                     }
                 }
 
@@ -202,19 +213,27 @@ public class GameManager : MonoBehaviour
         {
             //Debug.Log(item.transform.position);
 
+            //we're too tired to make a dictionary holding the eggs' position in the 2D array
+            //but we realized their position in world was the same as as 2D array position
+            //so we decided to cheat lol
             if (item.transform.position == new Vector3(x, y, 0))
             {
-                //spawnedPiecesList.Add(newEgg);
+                //give the grid a new value: 3
                 grid[x, y] = 3;
+                
+                //if the original value of the grid is...
                 switch (gridXY)
                 {
                     case 0:
+                        //change the egg sprite to cracked brown
                         newEgg = Instantiate(brownEgg, new Vector3(x,y,0), Quaternion.identity);
                         break;
                     case 1:
+                        //change the egg sprite to cracked white
                         newEgg = Instantiate(whiteEgg, new Vector3(x,y,0), Quaternion.identity);
                         break;
                     case 2:
+                        //change the egg sprite to cracked rainbow
                         newEgg = Instantiate(rainbowEgg, new Vector3(x,y,0), Quaternion.identity);
                         break;
                     default:
@@ -222,7 +241,9 @@ public class GameManager : MonoBehaviour
                         break;
                 }
                 
+                //insert the egg to the original egg's position
                 spawnedPiecesList.Insert(y * 4 + x, newEgg);
+                //and then remove and destroy the original egg so the list index is not messed up
                 spawnedPiecesList.Remove(item);
                 Destroy(item);
                 break;
